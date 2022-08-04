@@ -1,0 +1,28 @@
+/*Border*/
+.color-wrapper{
+    position: fixed;
+    bottom:1rem;
+    right:1rem;
+    width:3.5rem;
+    border-radius: 2px;
+    box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.2), 0 2px 4px 0 rgba(0, 0, 0, 0.19);
+
+}
+/*Color item*/
+.color-one{
+    width:3.5rem;
+    height:2rem;
+    float:left;
+    text-align: center;
+    line-height: 1.5rem;
+    font-size: 0.8rem;
+    cursor: pointer;
+}
+/*White text*/
+.text_white{
+    color:white;
+}
+/*Black text*/
+.text_black{
+    color:black;
+}

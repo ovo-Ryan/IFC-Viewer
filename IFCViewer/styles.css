@@ -1,0 +1,111 @@
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html, body {
+    overflow: hidden;
+}
+
+#viewer-container {
+    position: fixed;
+    top: 0;
+    left: 0;
+    outline: none;
+    width: 70%;
+    height: 100%;
+    float:left;
+}
+
+
+.message-container {
+    z-index: 1;
+    position: absolute;
+    margin: 16px;
+    background-color: rgba(255,255,255,0.8);
+    display: inline-block;
+    padding: 10px;
+    overflow: auto;
+    width: 20vw;
+    height: 80vh;
+}
+#myChart{
+    position: absolute;
+    top: 50%;
+    left: 70%;
+    transform: translate(0, -50%);
+    outline: none;
+    width: 30%;
+    height: 30%;
+    float:left;
+}
+
+#range{
+    position: absolute;
+    top: 25px;
+    left: 2%;
+    outline: none;
+    width: 25%;
+    float:left;
+}
+#tag{
+    position: absolute;
+    top: 45px;
+    left: 10.8%;
+    outline: none;
+    width: 25%;
+    float:left;
+}
+#SAR-view{
+    position: relative;
+    top:5px;
+    outline: none;
+    left: 3%;
+    float:left;
+    vertical-align: middle;
+}
+#text{
+    position: relative;
+    outline: none;
+    float:left;
+    top:5px;
+    left: 2%;   
+}
+#file-input{
+    z-index: 1;
+    position: absolute;
+}
+
+.checkboxes {
+    position: absolute;
+    left: 1rem;
+    top: 1rem;
+}
+
+.file {
+    position: relative;
+    display: inline-block;
+    background: #D0EEFF;
+    border: 1px solid #99D3F5;
+    border-radius: 4px;
+    padding: 4px 12px;
+    overflow: hidden;
+    color: #1E88C7;
+    text-decoration: none;
+    text-indent: 0;
+    line-height: 20px;
+}
+.file input {
+    position: absolute;
+    font-size: 100px;
+    right: 0;
+    top: 0;
+    opacity: 0;
+}
+.file:hover {
+    background: #AADFFD;
+    border-color: #78C3F3;
+    color: #004974;
+    text-decoration: none;
+}

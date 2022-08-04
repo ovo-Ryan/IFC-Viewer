@@ -1,0 +1,128 @@
+
+#viewer-container {
+    position: absolute;
+    width: 100vw;
+    height: 100vh;
+    overflow: hidden;
+}
+
+
+#resultTable {
+    z-index: 1;
+    position: relative;
+    float: right;
+    display: block;
+    overflow: auto;
+
+
+}
+
+#myChart {
+    z-index: 1;
+    position: absolute;
+    bottom: 0;
+    width: 35vw;
+    height: 35vh;
+    /* transform: translate(0, -50%); */
+    outline: none;
+    float: left;
+
+}
+
+.use-font {
+    /*font-family: URW Chancery L, cursive;*/
+    color: #fafafa;
+    margin: 10px;
+    text-align: center;
+    font-size: 30px;
+    background-color: #482e3b;
+    border-radius: 10px;
+}
+
+#checkboxes {
+    visibility: hidden;
+    z-index: 1;
+    text-transform: uppercase;
+
+    color: #ff8ed7;
+    cursor: default;
+    font-family: "Gill Sans", Impact, sans-serif;
+    font-size: 22px;
+    margin-left: 1.5vw;
+    margin-top: 7vh;
+    position: absolute;
+    text-align: center;
+    width: 100px;
+
+}
+#spinner{
+    position: absolute;
+    width: 5vw;
+    height: 5vw;
+    font-size: 3vw;
+    left: 45vw;
+    top:45vh;
+
+}
+#toolbar {
+    z-index: 1;
+    position: absolute;
+    padding: 1vh;
+}
+
+.btn-tool {
+    color: #FFFFFF;
+    background-color: #FF6EB7;
+    border-color: #FFFFFF;
+    padding: 3px 8px;
+    border-radius: 10px;
+    font-size: 3vh;
+
+}
+
+.btn-tool:hover,
+.open .dropdown-toggle.btn-tool {
+    color: #FFFFFF;
+    background-color: #9C9C9C;
+    border-color: #FFFFFF;
+}
+
+
+.btn-tool.disabled,
+.btn-tool[disabled],
+fieldset[disabled] .btn-tool,
+.btn-tool.disabled:hover,
+.btn-tool[disabled]:hover,
+fieldset[disabled] .btn-tool:hover,
+
+.btn-tool .badge {
+    color: #FF6EB7;
+    background-color: #FFFFFF;
+}
+.btn-toola {
+    color: #FFFFFF;
+    background-color: #FF6EB7;
+    border-color: #FFFFFF;
+    padding: 3px 8px;
+    border-radius: 10px;
+    font-size: 3vh;
+
+}
+
+.btn-toola:hover,
+    .btn-toola:active,
+    .btn-toola.active,
+.open .dropdown-toggle.btn-toola {
+    color: #FFFFFF;
+    background-color: #9C9C9C;
+    border-color: #FFFFFF;
+}
+
+
+
+.btn-tool .badge {
+    color: #FF6EB7;
+    background-color: #FFFFFF;
+}
+
+

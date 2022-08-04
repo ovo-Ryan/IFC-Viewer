@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>IFC-Viewer</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="css/color-bar.css">
+    <link rel="stylesheet" href="font/bootstrap-icons.css">
+</head>
+<body>
+<div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasTable" >
+    <h2 class = "use-font">Toggle Properties</h2>
+    <table id="resultTable" class="table table-hover"></table>
+</div>
+
+
+
+<canvas id="myChart"></canvas>
+<div id="viewer-container">
+    <div class="spinner-border text-danger" id = "spinner"></div>
+    <div id="toolbar">
+        <input id="file-input" type="file" style="display:none; ">
+        <label for="file-input" class="bi bi-file-earmark-plus-fill btn-tool " data-toggle="tooltip"
+               data-placement="bottom" title="Load File">
+        </label>
+        </input>
+        <button  class="btn-tool" style="border: none;margin-left: 1.5vw" onclick="categoriesShow()" data-toggle="tooltip"
+                 data-placement="bottom" title="Storeys">
+            <span class="bi bi-layers-fill"></span>
+        </button>
+        <button  class="btn-tool" style="border: none" onclick="sar_switch()" data-toggle="tooltip"
+                 data-placement="bottom" title="Line of sight Velocity">
+            <span class="bi bi-box-fill"></span>
+        </button>
+        <button  id ="slice-object" class="btn-toola" style="border: none"  data-toggle="tooltip"
+                 data-placement="bottom" title="Slice Objects" onclick="$('#slice-object').button('toggle');">
+            <span class="bi bi-scissors"></span>
+        </button>
+        <button  id ="toggle-perspective" class="btn-toola" style="border: none"  data-toggle="tooltip"
+                 data-placement="bottom" title="Toggle Perspective/Ortho" onclick="$('#toggle-perspective').button('toggle');">
+            <span class="bi bi-boxes"></span>
+        </button>
+
+
+
+    </div>
+    <button  class="btn-tool" style="border: none; right: 1.5vw;z-index: 1;
+    position: absolute;
+    margin: 1vh;"  data-toggle="tooltip"
+             data-placement="bottom" title="Toggle Properties" data-bs-toggle="offcanvas" data-bs-target="#offcanvasTable" aria-controls="offcanvasTable">
+        <span class="bi bi-info-square-fill"></span>
+    </button>
+    <div id="checkboxes">
+        <div>
+            <input checked="true" id="IFCWALL" type="checkbox">
+            Walls
+        </div>
+        <div>
+            <input checked="true" id="IFCSLAB" type="checkbox">
+            Slabs
+        </div>
+        <div>
+            <input checked="true" id="IFCROOF" type="checkbox">
+            Roofs
+        </div>
+        <div>
+            <input checked="true" id="IFCBEAM" type="checkbox">
+            Beam
+        </div>
+        <div>
+            <input checked="true" id="IFCCOLUMN" type="checkbox">
+            Column
+        </div>
+
+    </div>
+</div>
+<div class = "color-wrapper" id = "colorbar" style="visibility: hidden"></div>
+
+
+<script src="js/jquery.min.js"></script>
+<script src="js/color-bar.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script src="/js/bootstrap.bundle.min.js"></script>
+<script src="bundle.js"></script> <!-- dotn change this -->
+<!-- this is the actual application -->
+<script src="app.js"></script>
+</body>
+</html>
