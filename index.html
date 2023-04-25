@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+
+    <!--  Cesium Libary-->
+    <script src="https://cesium.com/downloads/cesiumjs/releases/1.78/Build/Cesium/Cesium.js"></script>
+    <link href="https://cesium.com/downloads/cesiumjs/releases/1.78/Build/Cesium/Widgets/widgets.css" rel="stylesheet">
+    <style>
+        /*@import url(bucket.css);*/
+        /*@import url(widgets.css);*/
+        html,
+        body,
+        #cesiumContainer {
+            width: 100%;
+            height: 100%;
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+        }
+
+        #getposition {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width:350px;
+            height: 180px;
+            background-color: gray;
+            opacity: 80%
+        }
+    </style>
+</head>
+<body>
+<script>src = "app.js"</script>
+<div id="cesiumContainer" style="width: 100%; height:100%"></div>
+
+<div id="getposition">
+    <label>Local optimal position</label>
+    <input type="button" value="Default" onclick="changeStep(1)">
+    <br />
+
+    <p>Point clouds</p>
+    <input type="button" value="x+" onclick="change(0)">
+
+    <input type="button" value="x-" onclick="change(1)">
+
+    <input type="button" value="y+" onclick="change(2)">
+    <input type="button" value="y-" onclick="change(3)">
+    <input type="button" value="z+" onclick="change(4)">
+    <input type="button" value="z-" onclick="change(5)">
+    <br />
+
+
+    <p>3D model</p>
+    <input type="button" value="x_m+" onclick="change_m(0)">
+    <input type="button" value="x_m-" onclick="change_m(1)">
+    <input type="button" value="y_m+" onclick="change_m(2)">
+    <input type="button" value="y_m-" onclick="change_m(3)">
+    <input type="button" value="z_m+" onclick="change_m(4)">
+    <input type="button" value="z_m-" onclick="change_m(5)">
+    <br />
+
+    <div id="result" style="background: white;"></div>
+</div>
+<script>
+    // Grant CesiumJS access to your ion assets
+    Cesium.Ion.defaultAccessToken = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJqdGkiOiIwOGRkNjg2ZC03OWIzLTQzOWUtYWFkMy01YjRkYzk5YjUxMTgiLCJpZCI6NzM2OTMsImlhdCI6MTYzNzEyNjE5M30.Z5zr6OHM_2zHiCEBnKfGa3Z3VHxD7PudidBX-iakZt0";
+    //Cesium.BingMapsApi.defaultKey = 'ApOW9LMkerqWIVSnFauilSeaZyp8df66byy1USCTjgTdMvhb4y1iAhEsUHQfCgzq'
+
+    const viewer = new Cesium.Viewer("cesiumContainer", {
+        terrainProvider: new Cesium.CesiumTerrainProvider({  // this is the DSM
+            url: Cesium.IonResource.fromAssetId(1),
+        }),
+        animation: false, // no timeline and clock
+        timeline: false,
+        fullscreenButton: false,
+        navigationHelpButton: false,
+        projectionPicker: true,
+        imageryLayers: false,
+        infoBox: true,
+        baseLayerPicker: false,
+        bottomContainer: false,
+        geocoder: false,
+        sceneModePicker: true,
+        cesiumCredit: false,
+        cesiumWidget: false,
+        selectionIndicator: false,
+
+
+    });
+    viewer.scene.globe.depthTestAgainstTerrain = true;
+
+    //  Set and fix view with heading, pitch and roll 51.749904826908114, 7.917623077846108
+    // var center = Cesium.Rectangle.fromDegrees(7.917623077846108,51.749904826908114,200);
+    var extent = Cesium.Rectangle.fromDegrees(7.917623077846108,51.749904826908114, 7.917623077846108,51.749904826908114); // Bounding Box of ROI
+    Cesium.Camera.DEFAULT_VIEW_RECTANGLE = extent;
+    Cesium.Camera.DEFAULT_VIEW_FACTOR = 0.0001;
+
+    //viewer.camera.lookAtTransform(transform, new Cesium.HeadingPitchRange(heading, pitch, range));
+
+
+
+    const tileset = viewer.scene.primitives.add(
+        new Cesium.Cesium3DTileset({
+            url: Cesium.IonResource.fromAssetId(1618175),
+        })
+    );
+
+
+    // function changeHeight() {
+    //     height = document.getElementById('range').value;
+    //     document.getElementById('height').value = document.getElementById('range').value;
+    //     height = Number(height);
+    //     height = -80.5;
+    //     height_psi = -15;
+    //     if (isNaN(height)) {
+    //         return;
+    //     }
+    //     var cartographic_psi = Cesium.Cartographic.fromCartesian(tilesetPSI.boundingSphere.center);
+    //     var surface_psi = Cesium.Cartesian3.fromRadians(cartographic_psi.longitude, cartographic_psi.latitude, 0.0);
+    //     var offset_psi = Cesium.Cartesian3.fromRadians(cartographic_psi.longitude+0.000003, cartographic_psi.latitude,height_psi);
+    //     var translation_psi = Cesium.Cartesian3.subtract(offset_psi, surface_psi, new Cesium.Cartesian3());
+    //     tilesetPSI.modelMatrix = Cesium.Matrix4.fromTranslation(translation_psi);
+    //     var cartographic = Cesium.Cartographic.fromCartesian(tileset.boundingSphere.center);
+    //     var surface = Cesium.Cartesian3.fromRadians(cartographic.longitude, cartographic.latitude, 0.0);
+    //     var offset = Cesium.Cartesian3.fromRadians(cartographic.longitude, cartographic.latitude,height);
+    //     var translation = Cesium.Cartesian3.subtract(offset, surface, new Cesium.Cartesian3());
+    //     tileset.modelMatrix = Cesium.Matrix4.fromTranslation(translation);
+    // }
+
+
+    // ADD a point cloud
+    const tilesetPSI = viewer.scene.primitives.add(
+        new Cesium.Cesium3DTileset({
+            url: Cesium.IonResource.fromAssetId(1582995),
+        })
+    );
+
+    tilesetPSI.style = new Cesium.Cesium3DTileStyle({
+        pointSize: 2
+    });
+
+
+    (async () => {
+        try {
+            await tileset.readyPromise;
+            await viewer.zoomTo(tileset);
+
+            // Apply the default style if it exists
+            var extras = tileset.asset.extras;
+            if (
+                Cesium.defined(extras) &&
+                Cesium.defined(extras.ion) &&
+                Cesium.defined(extras.ion.defaultStyle)
+            ) {
+                tileset.style = new Cesium.Cesium3DTileStyle(extras.ion.defaultStyle);
+            }
+        } catch (error) {
+            console.log(error);
+        }
+    })();
+    var step = 0.00001 * Math.PI / 180;
+    var step_h = 0.5;
+    var x = 0;
+    var y = 0;
+    var z = 0;
+    var x_d = 0;
+    var y_d = 0;
+    var z_d = 0;
+    var surface_psi;
+    var x_m = 0;
+    var y_m = 0;
+    var z_m = 0;
+    var x_m_d = 0;
+    var y_m_d = 0;
+    var z_m_d = 0;
+    var surface;
+
+    tilesetPSI.readyPromise.then(function() {
+
+
+        var center_psi = tilesetPSI.boundingSphere.center;
+        var cartographic_psi = Cesium.Cartographic.fromCartesian(center_psi);
+        x = cartographic_psi.longitude;
+        y = cartographic_psi.latitude;
+        surface_psi = Cesium.Cartesian3.fromRadians(cartographic_psi.longitude, cartographic_psi.latitude, 0.0);
+        var translation_m = Cesium.Cartesian3.fromRadians(x, y, -1);
+        var translationVector_m = Cesium.Cartesian3.subtract(translation_m, surface_psi, new Cesium.Cartesian3());
+        tilesetPSI.modelMatrix = Cesium.Matrix4.fromTranslation(translationVector_m);
+        x=Cesium.Cartographic.fromCartesian(tilesetPSI.boundingSphere.center).longitude;
+        y=Cesium.Cartographic.fromCartesian(tilesetPSI.boundingSphere.center).latitude;
+        z = -1;
+        x_d = x;
+        y_d = y;
+        z_d = z;
+        // surface_psi_t = Cesium.Cartesian3.fromRadians(x, y, z);
+    });
+    tileset.readyPromise.then(function() {
+
+        var center = tileset.boundingSphere.center;
+        var cartographic = Cesium.Cartographic.fromCartesian(center);
+        x_m = cartographic.longitude;
+        y_m = cartographic.latitude;
+        surface = Cesium.Cartesian3.fromRadians(cartographic.longitude, cartographic.latitude, 0.0);
+        var translation = Cesium.Cartesian3.fromRadians(x_m, y_m, -78.5);
+        var translationVector = Cesium.Cartesian3.subtract(translation, surface, new Cesium.Cartesian3());
+        tileset.modelMatrix = Cesium.Matrix4.fromTranslation(translationVector);
+        x_m=Cesium.Cartographic.fromCartesian(tileset.boundingSphere.center).longitude;
+        y_m=Cesium.Cartographic.fromCartesian(tileset.boundingSphere.center).latitude;
+        z_m = -78.5;
+        x_m_d = x_m;
+        y_m_d = y_m;
+        z_m_d = z_m;
+        // surface_t = Cesium.Cartesian3.fromRadians(x_m, y_m, z_m);
+    });
+    function changeStep() {
+
+        var translation_m = Cesium.Cartesian3.fromRadians(x, y, -1);
+        var translationVector_m = Cesium.Cartesian3.subtract(translation_m, surface_psi, new Cesium.Cartesian3());
+        tilesetPSI.modelMatrix = Cesium.Matrix4.fromTranslation(translationVector_m);
+        x = x_d;
+        y= y_d;
+        z=z_d;
+
+
+        var translation = Cesium.Cartesian3.fromRadians(x_m, y_m, -78.5);
+        var translationVector = Cesium.Cartesian3.subtract(translation, surface, new Cesium.Cartesian3());
+        tileset.modelMatrix = Cesium.Matrix4.fromTranslation(translationVector);
+        x_m=x_m_d;
+        y_m = y_m_d;
+        z_m = z_m_d;
+    }
+
+    function change(type) {
+        switch (type) {
+            case 0:
+                x += step;
+                break;
+            case 1:
+                x -= step;
+                break;
+            case 2:
+                y += step;
+                break;
+            case 3:
+                y -= step;
+                break;
+            case 4:
+                z += step_h;
+                break;
+            case 5:
+                z -= step_h;
+                break;
+        }
+
+        var translation = Cesium.Cartesian3.fromRadians(x, y, z);
+        var translationVector = Cesium.Cartesian3.subtract(translation, surface_psi, new Cesium.Cartesian3());
+        tilesetPSI.modelMatrix = Cesium.Matrix4.fromTranslation(translationVector);
+    }
+
+    function change_m(type) {
+        switch (type) {
+            case 0:
+                x_m += step;
+                break;
+            case 1:
+                x_m -= step;
+                break;
+            case 2:
+                y_m += step;
+                break;
+            case 3:
+                y_m -= step;
+                break;
+            case 4:
+                z_m += step_h;
+                break;
+            case 5:
+                z_m -= step_h;
+                break;
+        }
+
+        var translation = Cesium.Cartesian3.fromRadians(x_m, y_m, z_m);
+        var translationVector = Cesium.Cartesian3.subtract(translation, surface, new Cesium.Cartesian3());
+        tileset.modelMatrix = Cesium.Matrix4.fromTranslation(translationVector);
+    }
+
+    var handler = new Cesium.ScreenSpaceEventHandler(viewer.canvas);
+    handler.setInputAction(function (movement){
+        var feature = viewer.scene.pick(movement.position);
+        console.log(feature);
+    },Cesium.ScreenSpaceEventType.LEFT_CLICK);
+    processPntsData()
+</script>
+</body>
+</html>
